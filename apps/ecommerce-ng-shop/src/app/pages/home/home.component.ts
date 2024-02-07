@@ -4,4 +4,6 @@ import { Component } from '@angular/core';
   selector: 'ng-shop-home',
   templateUrl: './home.component.html',
 })
-export class HomeComponent {}
+export class HomeComponent {
+  selectedValue: string;
+}

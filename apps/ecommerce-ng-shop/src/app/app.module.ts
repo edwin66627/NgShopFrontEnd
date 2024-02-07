@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
+
 import { UiModule } from "@mycompany/ui";
 
 import { AppComponent } from './app.component';
@@ -17,7 +20,7 @@ import { FooterComponent } from './shared/footer/footer.component';
     HeaderComponent,
     FooterComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, UiModule],
+  imports: [BrowserModule, BrowserAnimationsModule, AppRoutingModule, UiModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })
