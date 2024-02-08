@@ -1,0 +1,19 @@
+// Base Config
+@import '~normalize.css/normalize.css'; // removes whitespace on the left 
+@import './base/colors.scss';
+@import './base/fonts.scss';
+@import './base/mixins.scss';
+
+// Prime NG
+@import "primeicons/primeicons.css";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.min.css";
+@import "primeflex/primeflex.css";
+
+@import './base/configuration.scss'; // Overrides PrimeNG fonts
+
+//Shared
+@import './apps/admin/shell.scss';
+
+// libs
+@import './libs/ui/ui.scss'
