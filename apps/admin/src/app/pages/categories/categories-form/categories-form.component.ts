@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Category } from '@mycompany/products';
+import { Category, CategoriesService } from '@mycompany/products';
+import { MessageService } from 'primeng/api';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'admin-categories-form',
@@ -13,8 +15,10 @@ export class CategoriesFormComponent implements OnInit {
   isSubmitted = false;
 
   constructor(
+    private categoriesService: CategoriesService,
     private formBuilder: FormBuilder,
-    private location: Location
+    private location: Location,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +44,26 @@ export class CategoriesFormComponent implements OnInit {
   }
 
   private _addCategory(category: Category){
-    console.log(category);
+    this.categoriesService.createCategory(category).subscribe({
+      next: (category: Category) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: `Category ${category.name} is created!`
+        })
+        timer(2000)
+          .subscribe(() => {
+            this.location.back();
+        });
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Category is not created!'
+        });
+      }  
+    });
   }
 
   onCancel() {

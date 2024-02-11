@@ -21,6 +21,8 @@ import { CategoriesFormComponent } from './pages/categories/categories-form/cate
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ColorPickerModule } from 'primeng/colorpicker';
+import { CategoriesService } from 'libs/products/src/lib/services/categories.service';
+import { MessageService } from 'primeng/api';
 
 const UX_MODULE = [
   ButtonModule,
@@ -39,7 +41,7 @@ const UX_MODULE = [
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
     ...UX_MODULE
   ],
-  providers: [],
+  providers: [CategoriesService, MessageService],
   bootstrap: [AppComponent],
   exports: [
     DashboardComponent,
