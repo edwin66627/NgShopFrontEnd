@@ -22,12 +22,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { CategoriesService } from 'libs/products/src/lib/services/categories.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 const UX_MODULE = [
   ButtonModule,
   CardModule,
   ColorPickerModule,
+  ConfirmDialogModule,
   InputTextModule,
   TableModule,
   ToastModule,
@@ -41,7 +43,7 @@ const UX_MODULE = [
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
     ...UX_MODULE
   ],
-  providers: [CategoriesService, MessageService],
+  providers: [CategoriesService, ConfirmationService, MessageService],
   bootstrap: [AppComponent],
   exports: [
     DashboardComponent,

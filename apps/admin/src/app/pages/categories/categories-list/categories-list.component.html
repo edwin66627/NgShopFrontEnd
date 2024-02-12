@@ -38,6 +38,7 @@
                 </td>
                 <td>
                   <p-button
+                  (click)="deleteCategory(category.id)"
                     styleClass="p-button-danger p-mr-2"
                     icon="pi pi-trash"
                   ></p-button>
@@ -53,3 +54,9 @@
       </div>
     </p-card>
   </div>
+
+  <p-confirmDialog
+  [style]="{ width: '50vw' }"
+  [baseZIndex]="10000"
+  rejectButtonStyleClass="p-button-text"
+></p-confirmDialog>
