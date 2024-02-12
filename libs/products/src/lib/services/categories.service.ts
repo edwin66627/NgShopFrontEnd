@@ -12,6 +12,10 @@ export class CategoriesService {
   
   constructor(private http: HttpClient) {}
 
+  getCategory(categoryId: string): Observable<Category> {
+    return this.http.get<Category>(`${this.apiURLCategories}/${categoryId}`);
+  }
+
   getCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(this.apiURLCategories+"/list");
   }
@@ -19,7 +23,11 @@ export class CategoriesService {
   createCategory(category: Category): Observable<Category> {
     return this.http.post<Category>(this.apiURLCategories + "/new", category);
   }
-  
+
+  updateCategory(category: Category): Observable<Category> {
+    return this.http.put<Category>(`${this.apiURLCategories}/${category.id}`, category);
+  }
+
   deleteCategory(categoryId: string): Observable<any> {
     return this.http.delete<any>(`${this.apiURLCategories}/${categoryId}`);
   }
