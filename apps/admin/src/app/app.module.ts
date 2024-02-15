@@ -21,18 +21,28 @@ import { CategoriesFormComponent } from './pages/categories/categories-form/cate
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ColorPickerModule } from 'primeng/colorpicker';
-import { CategoriesService } from 'libs/products/src/lib/services/categories.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProductsListComponent } from './pages/products/products-list/products-list.component';
 import { ProductsFormComponent } from './pages/products/products-form/products-form.component';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { EditorModule } from 'primeng/editor';
+import { CategoriesService } from '@mycompany/products';
 
 const UX_MODULE = [
   ButtonModule,
   CardModule,
   ColorPickerModule,
   ConfirmDialogModule,
+  DropdownModule,
+  EditorModule,
+  InputNumberModule,
+  InputTextareaModule,
   InputTextModule,
+  InputSwitchModule,
   TableModule,
   ToastModule,
   ToolbarModule,
