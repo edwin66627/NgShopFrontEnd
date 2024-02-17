@@ -30,6 +30,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { EditorModule } from 'primeng/editor';
+
 import { CategoriesService } from '@mycompany/products';
 
 const UX_MODULE = [

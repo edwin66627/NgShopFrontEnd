@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CategoriesService } from '@mycompany/products';
+import { CategoriesService, Upload } from '@mycompany/products';
 
 @Component({
   selector: 'admin-products-form',
@@ -13,7 +13,9 @@ export class ProductsFormComponent implements OnInit {
   catagories = [];
   form: FormGroup
   imageDisplay: string | ArrayBuffer;
+  imagesToSave: File[] = [];
   isSubmitted = false;
+  imagesUploaded: Upload[] = [];
 
   constructor(
     private categoriesService: CategoriesService,
@@ -47,7 +49,21 @@ export class ProductsFormComponent implements OnInit {
   }
 
   onImageUpload(event){
-    console.log("Event: ", event);
+    const file = event.target.files[0];
+    if (file.type == "image/png" || file.type == "image/jpg" || file.type == "image/jpeg") {
+      const tempFile = new Upload();
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        tempFile.file = file;
+        tempFile.url = fileReader.result;
+      };
+      fileReader.readAsDataURL(file);
+      this.imagesUploaded.push(tempFile);
+    }
+  }
+
+  removeImage(index: number){
+    this.imagesUploaded.splice(index, 1);
   }
 
   onCancel(){

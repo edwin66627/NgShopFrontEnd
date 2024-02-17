@@ -108,8 +108,15 @@
                 <small *ngIf="productForm.image.invalid && isSubmitted" class="p-error"
                   >Image is required</small
                 >
-                <div class="col-2 mt-2 pl-0">
-                  <img style="width: 100%" [src]="imageDisplay" alt="" />
+                <!---->
+                <div class="grid mt-2">
+                  <div class="col-2 pl-2 p-card-shadow" *ngFor="let image of imagesUploaded;let i=index">
+                    <img style="width: 100%" [src]="image.url" alt="" />
+                    <div class="flex flex-wrap justify-content-center">
+                      <button pButton pRipple type="button" (click)="removeImage(i)"
+                        icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined"></button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
