@@ -1,10 +1,12 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { CategoriesService, Category, Product, ProductsService, Upload } from '@mycompany/products';
-import { error } from 'console';
 import { MessageService } from 'primeng/api';
 import { timer } from 'rxjs';
+
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'admin-products-form',
@@ -13,9 +15,12 @@ import { timer } from 'rxjs';
   ]
 })
 export class ProductsFormComponent implements OnInit {
+  apiURL:string;
   catagories = [];
+  currentProductId: number;
   form: FormGroup
-  imageDisplay: string | ArrayBuffer;
+  editmode = false;
+  imagesToDelete: string[] = [];
   imagesToSave: File[] = [];
   isSubmitted = false;
   imagesUploaded: Upload[] = [];
@@ -25,12 +30,15 @@ export class ProductsFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private location: Location,
     private messageService: MessageService,
-    private productsService: ProductsService
+    private productsService: ProductsService,
+    private route: ActivatedRoute
   ){}
 
   ngOnInit(): void {
     this._initForm();
     this._getCategories();
+    this._checkEditMode();
+    this.apiURL = environment.apiUrl;
   }
 
   private _initForm() {
@@ -68,11 +76,14 @@ export class ProductsFormComponent implements OnInit {
     }
   }
 
-  removeImage(index: number){
+  removeImage(index: number, filename: string){
     this.imagesUploaded.splice(index, 1);
 
+    if(this.editmode)
+      this.imagesToDelete.push(filename);
+
     if(this.imagesUploaded.length == 0)
-    this.form.patchValue({ image: "" });
+      this.form.patchValue({ image: "" });
   }
 
   onCancel(){
@@ -84,23 +95,21 @@ export class ProductsFormComponent implements OnInit {
     if (this.form.invalid) return;
 
     const product = this.returnProductToSave();
-    console.log("Product: ", product);
     const jsonForm = JSON.stringify(product);
-    console.log("Json Form: ", jsonForm);
-    const blob = new Blob([jsonForm], {
-      type: 'application/json'
-    });
+    const productBlob = new Blob([jsonForm], {type: 'application/json'});
     const productFormData = new FormData();
-    productFormData.append("product", blob);
-    this.imagesToSave = this.imagesUploaded.map(image => image.file);
-    for(let i = 0; i < this.imagesToSave.length; i++){
-      productFormData.append("images", this.imagesToSave[i])
+    productFormData.append("product", productBlob);
+    for(const image of this.imagesUploaded){
+      if(image.file !== undefined) productFormData.append("images", image.file)
     }
-    this._addProduct(productFormData);
+    if (this.editmode) {
+      this._updateProduct(productFormData);
+    } else {
+      this._addProduct(productFormData);
+    }
   }
 
   private _addProduct(productData: FormData){
-    console.log("Data to save: ", productData);
     this.productsService.createProduct(productData).subscribe({
       next: (product: Product) => {
         this.messageService.add({
@@ -123,8 +132,49 @@ export class ProductsFormComponent implements OnInit {
     })  
   }
 
-  get productForm() {
-    return this.form.controls;
+  private _updateProduct(productFormData: FormData) {
+    this.productsService.updateProduct(productFormData, this.currentProductId).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Product is updated!'
+        });
+        timer(2000)
+          .subscribe(() => {
+            this.location.back();
+          });
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Product is not updated!'
+        });
+      }
+    });
+  }
+
+  private _checkEditMode() {
+    this.route.params.subscribe((params) => {
+      if (params.id) {
+        this.editmode = true;
+        this.currentProductId = params.id;
+        this.productsService.getProduct(params.id).subscribe((product) => {
+          this.productForm.name.setValue(product.name);
+          this.productForm.category.setValue(product.category.id);
+          this.productForm.brand.setValue(product.brand);
+          this.productForm.price.setValue(product.price);
+          this.productForm.countInStock.setValue(product.countInStock);
+          this.productForm.isFeatured.setValue(product.isFeatured);
+          this.productForm.description.setValue(product.description);
+          this.productForm.richDescription.setValue(product.richDescription);
+          this.builtImagesUrl(product.image);
+          this.productForm.image.setValidators([]);
+          this.productForm.image.updateValueAndValidity();
+        });
+      }
+    });
   }
 
   private returnProductToSave(){
@@ -139,7 +189,23 @@ export class ProductsFormComponent implements OnInit {
     product.isFeatured = this.productForm.isFeatured.value;
     product.description = this.productForm.description.value;
     product.richDescription = this.productForm.richDescription.value;
+    if(this.imagesToDelete.length > 0) product.imagesToDelete = this.imagesToDelete;
     return product;
+  }
+
+  private builtImagesUrl(productImages:string){
+    const images = productImages.split(",");
+    
+    for(const image of images){
+      const upload = new Upload();
+      upload.filename = image;
+      upload.url = this.apiURL+"image/"+image;
+      this.imagesUploaded.push(upload);
+    }
+  }
+
+  get productForm() {
+    return this.form.controls;
   }
 
 }

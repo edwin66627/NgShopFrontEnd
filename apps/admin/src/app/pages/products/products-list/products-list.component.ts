@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ProductsService, GetProductsRequest } from '@mycompany/products';
 import { environment } from 'environments/environment';
 
@@ -15,6 +16,7 @@ export class ProductsListComponent implements OnInit {
 
   constructor(
     private productsService: ProductsService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -33,6 +35,10 @@ export class ProductsListComponent implements OnInit {
       this.products = products;
       
     });
+  }
+
+  updateProduct(productid: string) {
+    this.router.navigateByUrl(`products/form/${productid}`);
   }
 
 }

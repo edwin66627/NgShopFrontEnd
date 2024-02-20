@@ -16,8 +16,16 @@ export class ProductsService {
     return this.http.post<Product[]>(this.apiURLProducts+"/list", productsRequest);
   }
 
+  getProduct(productId: string): Observable<Product> {
+    return this.http.get<Product>(`${this.apiURLProducts}/${productId}/category`);
+  }
+  
   createProduct(productData: FormData): Observable<Product> {
     return this.http.post<Product>(this.apiURLProducts+"/new", productData);
+  }
+
+  updateProduct(productData: FormData, productid: number): Observable<Product> {
+    return this.http.put<Product>(`${this.apiURLProducts}/${productid}`, productData);
   }
   
 }

@@ -7,6 +7,7 @@ export class Product {
   richDescription?: string;
   image?: string;
   images?: string[];
+  imagesToDelete?: string[] = [];
   brand?: string;
   price?: number;
   category?: Category;
