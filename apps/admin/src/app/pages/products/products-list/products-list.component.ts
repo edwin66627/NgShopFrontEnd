@@ -11,8 +11,12 @@ import { environment } from 'environments/environment';
 })
 export class ProductsListComponent implements OnInit {
   apiURLImages = environment.apiUrl + 'image/';
+  loading: boolean;
+  pageSize = 3;
+  pageNumber = 0;
   productsRequest: GetProductsRequest;
   products = [];
+  totalElements: number;
 
   constructor(
     private productsService: ProductsService,
@@ -24,21 +28,30 @@ export class ProductsListComponent implements OnInit {
   }
   
   private _getProducts() {
+    this.loading = true;
     this.productsRequest = new GetProductsRequest();
+    this.productsRequest.pageSize = this.pageSize;
+    this.productsRequest.pageNumber = this.pageNumber;
     this.productsRequest.isFeatured = false;
     this.productsRequest.categories = [];
-    this.productsService.getProducts(this.productsRequest).subscribe((products) => {
-      products.forEach(product => {
+    this.productsService.getProducts(this.productsRequest).subscribe((page) => {
+      page.content.forEach(product => {
         const firstImage = product.image.split(",")[0];
         product.image = this.apiURLImages + firstImage;
       });
-      this.products = products;
-      
+      this.products = page.content;
+      this.totalElements = page.totalElements;
     });
+    this.loading = false;
   }
 
   updateProduct(productid: string) {
     this.router.navigateByUrl(`products/form/${productid}`);
+  }
+
+  loadPage($event){
+    this.pageNumber = $event.first / $event.rows;
+    this._getProducts();
   }
 
 }
