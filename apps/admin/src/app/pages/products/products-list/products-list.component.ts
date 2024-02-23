@@ -11,11 +11,13 @@ import { environment } from 'environments/environment';
 })
 export class ProductsListComponent implements OnInit {
   apiURLImages = environment.apiUrl + 'image/';
+  sortColumn = "name";
   loading: boolean;
   pageSize = 3;
   pageNumber = 0;
   productsRequest: GetProductsRequest;
   products = [];
+  sortDirection = "ASC";
   totalElements: number;
 
   constructor(
@@ -32,8 +34,11 @@ export class ProductsListComponent implements OnInit {
     this.productsRequest = new GetProductsRequest();
     this.productsRequest.pageSize = this.pageSize;
     this.productsRequest.pageNumber = this.pageNumber;
+    this.productsRequest.sortColumn = this.sortColumn;
+    this.productsRequest.sortDirection = this.sortDirection;
     this.productsRequest.isFeatured = false;
     this.productsRequest.categories = [];
+    console.log("Request: ", this.productsRequest);
     this.productsService.getProducts(this.productsRequest).subscribe((page) => {
       page.content.forEach(product => {
         const firstImage = product.image.split(",")[0];
@@ -50,8 +55,11 @@ export class ProductsListComponent implements OnInit {
   }
 
   loadPage($event){
+    console.log("On Page Change: ", $event)
     this.pageNumber = $event.first / $event.rows;
+    this.sortColumn = $event.sortField;
+    this.sortDirection = $event.sortOrder == 1 ? "ASC" : "DESC";
     this._getProducts();
   }
-
+  
 }
