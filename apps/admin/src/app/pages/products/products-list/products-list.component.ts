@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductsService, GetProductsRequest } from '@mycompany/products';
 import { environment } from 'environments/environment';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'admin-products-list',
@@ -21,6 +22,8 @@ export class ProductsListComponent implements OnInit {
   totalElements: number;
 
   constructor(
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
     private productsService: ProductsService,
     private router: Router
   ) {}
@@ -38,7 +41,6 @@ export class ProductsListComponent implements OnInit {
     this.productsRequest.sortDirection = this.sortDirection;
     this.productsRequest.isFeatured = false;
     this.productsRequest.categories = [];
-    console.log("Request: ", this.productsRequest);
     this.productsService.getProducts(this.productsRequest).subscribe((page) => {
       page.content.forEach(product => {
         const firstImage = product.image.split(",")[0];
@@ -54,10 +56,37 @@ export class ProductsListComponent implements OnInit {
     this.router.navigateByUrl(`products/form/${productid}`);
   }
 
+  deleteProduct(productId: string) {
+    console.log("Delete image ...")
+    this.confirmationService.confirm({
+      message: 'Do you want to Delete this Product?',
+      header: 'Delete Product',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.productsService.deleteProduct(productId).subscribe({
+          next: () => {
+            this._getProducts();
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Product is deleted!'
+            });
+          },
+          error: () => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Product is not deleted!'
+            });
+          } 
+        });
+      }
+    });
+  }
+
   loadPage($event){
-    console.log("On Page Change: ", $event)
     this.pageNumber = $event.first / $event.rows;
-    this.sortColumn = $event.sortField;
+    this.sortColumn = $event.sortField ? $event.sortField : "name";
     this.sortDirection = $event.sortOrder == 1 ? "ASC" : "DESC";
     this._getProducts();
   }
