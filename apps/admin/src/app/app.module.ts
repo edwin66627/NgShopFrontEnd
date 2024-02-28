@@ -32,6 +32,8 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { EditorModule } from 'primeng/editor';
 
 import { CategoriesService } from '@mycompany/products';
+import { UsersListComponent } from './users/users-list/users-list.component';
+import { UsersFormComponent } from './users/users-form/users-form.component';
 
 const UX_MODULE = [
   ButtonModule,
@@ -50,7 +52,7 @@ const UX_MODULE = [
 ]
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent, DashboardComponent, ShellComponent, SidebarComponent, CategoriesListComponent, CategoriesFormComponent, ProductsListComponent, ProductsFormComponent],
+  declarations: [AppComponent, NxWelcomeComponent, DashboardComponent, ShellComponent, SidebarComponent, CategoriesListComponent, CategoriesFormComponent, ProductsListComponent, ProductsFormComponent, UsersListComponent, UsersFormComponent],
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
@@ -66,6 +68,8 @@ const UX_MODULE = [
     CategoriesFormComponent,
     ProductsListComponent,
     ProductsFormComponent,
+    UsersListComponent,
+    UsersFormComponent,
   ],
 })
 export class AppModule {}
