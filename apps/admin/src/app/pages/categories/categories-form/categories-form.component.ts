@@ -9,7 +9,6 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'admin-categories-form',
   templateUrl: './categories-form.component.html',
-  styleUrls: ['./categories-form.component.scss']
 })
 export class CategoriesFormComponent implements OnInit {
   form: FormGroup;
