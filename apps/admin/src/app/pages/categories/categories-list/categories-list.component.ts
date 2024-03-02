@@ -6,7 +6,6 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 @Component({
   selector: 'admin-categories-list',
   templateUrl: './categories-list.component.html',
-  styleUrls: ['./categories-list.component.scss']
 })
 export class CategoriesListComponent implements OnInit {
   categories: Category[] = [];
