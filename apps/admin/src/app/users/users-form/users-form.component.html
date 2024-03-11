@@ -27,25 +27,22 @@
         <form [formGroup]="form">
           <div class="formgrid grid">
             <div class="field col">
-              <label for="firstName" class="mr-1">First Name</label>
-              <input formControlName="firstName" id="firstName" type="text" pInputText />
+              <label for="firstName" class="mr-1">First Name</label><br />
+              <input class="w-full" formControlName="firstName" id="firstName" type="text" pInputText />
               <small *ngIf="userForm.firstName.invalid && isSubmitted" class="p-error"
-                >First Name is required</small
-              >
+                >First Name is required</small>
             </div>
             <div class="field col">
-              <label for="lastName" class="mr-1">Last Name</label>
-              <input formControlName="lastName" id="lastName" type="text" pInputText />
+              <label for="lastName" class="mr-1">Last Name</label><br />
+              <input class="w-full" formControlName="lastName" id="lastName" type="text" pInputText />
               <small *ngIf="userForm.lastName.invalid && isSubmitted" class="p-error"
-                >Last Name is required</small
-              >
+                >Last Name is required</small>
             </div>
             <div class="field col">
-              <label for="username" class="mr-1">Username</label>
-              <input formControlName="username" id="username" type="text" pInputText />
+              <label for="username" class="mr-1">Username</label><br />
+              <input class="w-full" formControlName="username" id="username" type="text" pInputText />
               <small *ngIf="userForm.username.invalid && isSubmitted" class="p-error"
-                >Username is required</small
-              >
+                >Username is required</small>
             </div>
           </div>
           
@@ -59,64 +56,89 @@
                 optionLabel="name" 
                 display="chip">
               </p-multiSelect>
+              <br />
+              <small *ngIf="userForm.roles.invalid && isSubmitted" class="p-error"
+                >Selecting at least one Role is required</small>
             </div>
           </div>      
           <div class="formgrid grid"> 
             <div class="field col">
-              <label for="email" class="mr-1">Email</label>
-              <input formControlName="email" id="email" type="text" pInputText />
+              <label for="email" class="mr-1">Email</label><br />
+              <input class="w-full" formControlName="email" id="email" type="text" pInputText />
               <small *ngIf="userForm.email.invalid && isSubmitted" class="p-error"
                 ><span *ngIf="userForm.email.errors.required">email is required</span>
-                <span *ngIf="userForm.email.errors.email">email is invalid</span></small
-              >
-            </div> 
-            <div class="field col">
-              <label for="color" class="mr-1">Phone</label><br />
-              <p-inputMask
-                mask="999 999 9999"
-                formControlName="phone"
-                placeholder="999 999 9999"
-              ></p-inputMask>
-              <small *ngIf="userForm.phone.invalid && isSubmitted" class="p-error"
-                >phone is required</small
-              >
+                <span *ngIf="userForm.email.errors.email">email is invalid</span></small>
+            </div>
+            <div class="field col flex justify-content-center align-items-end">
+              <div>
+                <label for="color" class="pb-4">Phone</label><br />
+                <p-inputMask 
+                  mask="999 999 9999"
+                  formControlName="phone"
+                  placeholder="999 999 9999"
+                ></p-inputMask><br />
+                <small *ngIf="userForm.phone.invalid && isSubmitted" class="p-error"
+                  >phone is required</small>
+              </div>
             </div>
             <div class="field col">
-              <label for="password" class="mr-1">Password</label>
-              <input formControlName="password" id="password" type="password" pInputText />
+              <label for="password" class="mr-1">Password</label><br />
+              <input class="w-full" formControlName="password" id="password" type="password" pInputText />
               <small *ngIf="userForm.password.invalid && isSubmitted" class="p-error"
-                >Password is required</small
-              >
+                >Password is required</small>
             </div>
           </div>
-          <div class="formgrid grid">
-            <div class="field col-4">
-              <label for="street" class="mr-1">Street</label>
-              <input formControlName="street" id="apartment" type="text" pInputText />
-            </div>
-            <div class="field col-4">
-              <label for="city" class="mr-1">City</label>
-              <input formControlName="city" id="city" type="text" pInputText />
-            </div>
-            <div class="field col-4">
-              <label for="city" class="mr-1">State</label>
-              <input formControlName="state" id="city" type="text" pInputText />
-            </div>
-            <div class="field col-4">
-              <label for="country" class="mr-1">Country</label><br />
-              <p-dropdown
-                [options]="countries"
-                formControlName="country"
-                optionLabel="name"
-                optionValue="id"
-                [filter]="true"
-                filterBy="name"
-                [showClear]="true"
-                placeholder="Select a Country"
-              ></p-dropdown>
+          <div class="grid my-5">
+            <button (click)="addAddressFormGroup()" pButton pRipple type="button" label="Add Address" 
+              class="p-button-rounded p-button-success"></button>
+          </div>
+          <div formArrayName="addresses">
+            <div class="formgrid grid" *ngFor="let address of addressessFormArray.controls; let i = index"
+                formGroupName="{{i}}">
+              <div class="field col-4">
+                <label for="street" class="mr-1">Street</label><br />
+                <input class="w-full" formControlName="street" id="apartment" type="text" pInputText />
+                <small *ngIf="addressessFormArray.controls[i].get('street').errors?.required && isSubmitted" class="p-error"
+                  >Street is required</small>
+                {{ addressessFormArray.controls[i].get('street').errors | json }}
+              </div>
+              <div class="field col-2">
+                <label for="city" class="mr-1">City</label><br />
+                <input class="w-full" formControlName="city" id="city" type="text" pInputText />
+                <small *ngIf="addressessFormArray.controls[i].get('city').errors?.required && isSubmitted" class="p-error"
+                  >City is required</small>
+              </div>
+              <div class="field col-2">
+                <label for="city" class="mr-1">State</label><br />
+                <input class="w-full" formControlName="state" id="state" type="text" pInputText />
+                <small *ngIf="addressessFormArray.controls[i].get('state').errors?.required && isSubmitted" class="p-error"
+                  >State is required</small>
+              </div>
+              <div class="field col-2">
+                <label for="country" class="mr-1">Country</label><br />
+                <p-dropdown
+                  [options]="countries"
+                  formControlName="country"
+                  optionLabel="name"
+                  optionValue="id"
+                  [filter]="true"
+                  filterBy="name"
+                  [showClear]="true"
+                  placeholder="Select a Country"
+                ></p-dropdown>
+                <small *ngIf="addressessFormArray.controls[i].get('country').errors?.required && isSubmitted" class="p-error"
+                  >Country is required</small>
+              </div>
+              <div class="field col-2 flex justify-content-end align-items-center"
+                *ngIf="addressessFormArray.length > 1">
+                <p-button (click)="removeAddressFormGroup(i)" styleClass="p-button-danger p-mr-2" 
+                  icon="pi pi-trash"></p-button>
+              </div>
             </div>
           </div>
         </form>
+        <p>Form is valid: </p>{{ addressessFormArray.status }}
+        <!-- <pre><p>{{ roles | json }}</p></pre> -->
       </div>
     </div>
   </p-card>

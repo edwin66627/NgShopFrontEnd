@@ -2,7 +2,7 @@ import { Address } from "./address";
 import { Role } from "./role";
 
 export class User {
-    id?: string;
+    id?: number;
     firstName?: string;
     lastName?: string;
     username?: string;
