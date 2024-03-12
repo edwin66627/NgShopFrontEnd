@@ -1,6 +1,8 @@
 import { UsersService } from './../../../../../../libs/users/src/lib/services/users.service';
 import { GetUsersRequest } from './../../../../../../libs/users/src/lib/models/get-users-request';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'admin-users-list',
@@ -16,22 +18,25 @@ export class UsersListComponent implements OnInit {
   usersRequest: GetUsersRequest;
   users = [];
 
-  constructor(private usersService: UsersService){}
+  constructor(
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+    private router: Router,  
+    private usersService: UsersService
+  ){}
 
   ngOnInit(): void {
-    console.log("On Inint...");
     this._getUsers();
   }
 
   private _getUsers(){
-    console.log("Get Users")
     this.loading = true;
     this.usersRequest = new GetUsersRequest();
     this.usersRequest.pageSize = this.pageSize;
     this.usersRequest.pageNumber = this.pageNumber;
     this.usersRequest.sortColumn = this.sortColumn;
     this.usersRequest.sortDirection = this.sortDirection;
-    this.usersService.getProducts(this.usersRequest).subscribe(page => {
+    this.usersService.getUsers(this.usersRequest).subscribe(page => {
       this.users = page.content;
       this.totalElements = page.totalElements;
     });
@@ -48,15 +53,38 @@ export class UsersListComponent implements OnInit {
   }
 
   getAddress(addresses){
-    return addresses[0].country;
+    return addresses.length > 0 ? addresses[0].country : "";
   }
 
-  updateUser(){
-    console.log("Update User!!!");
+  updateUser(userid: number){
+    this.router.navigateByUrl(`users/form/${userid}`);
   }
   
-  deleteUser(){
-    console.log("Delete User!!!");
+  deleteUser(userId: string){
+    this.confirmationService.confirm({
+      message: 'Do you want to Delete this User?',
+      header: 'Delete User',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.usersService.deleteUser(userId).subscribe({
+          next: () => {
+            this._getUsers();
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'User is deleted!'
+            });
+          },
+          error: () => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'User is not deleted!'
+            });
+          } 
+        });
+      }
+    });
   }
 
   loadPage($event){

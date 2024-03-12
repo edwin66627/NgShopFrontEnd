@@ -20,8 +20,12 @@ export class UsersService {
     countriesLib.registerLocale(require('i18n-iso-countries/langs/en.json'));
   }
 
-  getProducts(usersRequest: GetUsersRequest): Observable<Page> {
+  getUsers(usersRequest: GetUsersRequest): Observable<Page> {
     return this.http.post<Page>(this.apiURLUsers+"/list", usersRequest);
+  }
+
+  getUser(userId: string): Observable<User> {
+    return this.http.get<User>(`${this.apiURLUsers}/${userId}`);
   }
 
   getCountries(): { id: string; name: string }[] {
@@ -35,6 +39,14 @@ export class UsersService {
 
   createUser(user: User): Observable<User> {
     return this.http.post<User>(this.apiURLAuth + "/signup", user);
+  }
+
+  updateUser(user: User): Observable<User> {
+    return this.http.put<User>(`${this.apiURLUsers}/${user.id}`, user);
+  }
+
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiURLUsers}/${userId}`);
   }
 
 }
