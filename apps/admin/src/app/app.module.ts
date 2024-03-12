@@ -32,10 +32,13 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { EditorModule } from 'primeng/editor';
 import { InputMaskModule } from 'primeng/inputmask';
 import {MultiSelectModule} from 'primeng/multiselect';
+import { TagModule } from 'primeng/tag';
 
 import { CategoriesService } from '@mycompany/products';
 import { UsersListComponent } from './users/users-list/users-list.component';
 import { UsersFormComponent } from './users/users-form/users-form.component';
+import { OrdersDetailComponent } from './pages/orders/orders-detail/orders-detail.component';
+import { OrdersListComponent } from './pages/orders/orders-list/orders-list.component';
 
 const UX_MODULE = [
   ButtonModule,
@@ -51,12 +54,13 @@ const UX_MODULE = [
   InputSwitchModule,
   MultiSelectModule,
   TableModule,
+  TagModule,
   ToastModule,
   ToolbarModule,
 ]
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent, DashboardComponent, ShellComponent, SidebarComponent, CategoriesListComponent, CategoriesFormComponent, ProductsListComponent, ProductsFormComponent, UsersListComponent, UsersFormComponent],
+  declarations: [AppComponent, NxWelcomeComponent, DashboardComponent, ShellComponent, SidebarComponent, CategoriesListComponent, CategoriesFormComponent, ProductsListComponent, ProductsFormComponent, UsersListComponent, UsersFormComponent, OrdersDetailComponent, OrdersListComponent],
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
@@ -74,6 +78,8 @@ const UX_MODULE = [
     ProductsFormComponent,
     UsersListComponent,
     UsersFormComponent,
+    OrdersDetailComponent,
+    OrdersListComponent
   ],
 })
 export class AppModule {}

@@ -1,12 +1,8 @@
-import { Address } from './../../../../../../libs/users/src/lib/models/address';
-import { RolesService } from './../../../../../../libs/users/src/lib/services/roles.service';
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Role } from '@mycompany/users';
-import { User } from 'libs/users/src/lib/models/user';
-import { UsersService } from 'libs/users/src/lib/services/users.service';
+import { User, UsersService, Role, RolesService, Address } from '@mycompany/users';
 import { MessageService } from 'primeng/api';
 import { timer } from 'rxjs';
 
