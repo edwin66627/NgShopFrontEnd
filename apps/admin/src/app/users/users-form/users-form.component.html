@@ -10,12 +10,14 @@
               styleClass="p-button-primary mr-2"
               [label]="editmode ? 'Update' : 'Create'"
               icon="pi pi-plus"
+              [loading]="loading"
               (click)="onSubmit()"
             ></p-button>
             <p-button
               styleClass="p-button-secondary"
               label="Cancel"
               icon="pi pi-arrow-circle-left"
+              [loading]="loading"
               (click)="onCancel()"
             ></p-button>
           </div>
@@ -30,19 +32,23 @@
               <label for="firstName" class="mr-1">First Name</label><br />
               <input class="w-full" formControlName="firstName" id="firstName" type="text" pInputText />
               <small *ngIf="userForm.firstName.invalid && isSubmitted" class="p-error"
-                >First Name is required</small>
+                >First Name is required</small><br />
             </div>
             <div class="field col">
               <label for="lastName" class="mr-1">Last Name</label><br />
               <input class="w-full" formControlName="lastName" id="lastName" type="text" pInputText />
               <small *ngIf="userForm.lastName.invalid && isSubmitted" class="p-error"
                 >Last Name is required</small>
+              <small *ngIf="userForm.firstName.errors?.minlength" class="p-error"
+                >Last Name minimum length is 3 characters</small>  
             </div>
             <div class="field col">
               <label for="username" class="mr-1">Username</label><br />
               <input class="w-full" formControlName="username" id="username" type="text" pInputText />
               <small *ngIf="userForm.username.invalid && isSubmitted" class="p-error"
                 >Username is required</small>
+              <small *ngIf="userForm.firstName.errors?.minlength" class="p-error"
+                >Username minimum length is 6 characters</small>  
             </div>
           </div>
           
@@ -69,23 +75,33 @@
                 ><span *ngIf="userForm.email.errors.required">email is required</span>
                 <span *ngIf="userForm.email.errors.email">email is invalid</span></small>
             </div>
-            <div class="field col flex justify-content-center align-items-end">
-              <div>
-                <label for="color" class="pb-4">Phone</label><br />
-                <p-inputMask 
-                  mask="999 999 9999"
-                  formControlName="phone"
-                  placeholder="999 999 9999"
-                ></p-inputMask><br />
-                <small *ngIf="userForm.phone.invalid && isSubmitted" class="p-error"
-                  >phone is required</small>
-              </div>
+            <div class="field col">
+              <label for="color">Phone</label><br />
+              <p-inputMask 
+                mask="999 999 9999"
+                formControlName="phone"
+                placeholder="999 999 9999"
+              ></p-inputMask><br />
+              <small *ngIf="userForm.phone.invalid && isSubmitted" class="p-error"
+                >phone is required</small>
             </div>
             <div class="field col">
               <label for="password" class="mr-1">Password</label><br />
               <input class="w-full" formControlName="password" id="password" type="password" pInputText />
               <small *ngIf="userForm.password.invalid && isSubmitted" class="p-error"
                 >Password is required</small>
+              <div *ngIf="userForm.password.dirty">
+                <small class="p-error" *ngIf="!userForm.password.value.match('^(?=.*[A-Z])')"
+                  >At least one uppercase</small><br />
+                <small class="p-error" *ngIf="!userForm.password.value.match('(?=.*[a-z])')" 
+                  >At least one lowercase</small><br />
+                <small class="p-error" *ngIf="!userForm.password.value.match('(.*[0-9].*)')" 
+                  >At least one number</small><br />
+                <small class="p-error" *ngIf="!userForm.password.value.match('(?=.*[!@#$%^&*])')" 
+                  >At least one special character</small><br />
+                <small class="p-error" *ngIf="! userForm.password.value.match('.{8,}')"
+                  >At least 8 characters</small><br />
+              </div>
             </div>
           </div>
           <div class="grid my-5">
@@ -100,7 +116,6 @@
                 <input class="w-full" formControlName="street" id="apartment" type="text" pInputText />
                 <small *ngIf="addressessFormArray.controls[i].get('street').errors?.required && isSubmitted" class="p-error"
                   >Street is required</small>
-                {{ addressessFormArray.controls[i].get('street').errors | json }}
               </div>
               <div class="field col-2">
                 <label for="city" class="mr-1">City</label><br />
@@ -137,7 +152,7 @@
             </div>
           </div>
         </form>
-        <p>Form is valid: </p>{{ addressessFormArray.status }}
+        <!-- <p>Form is valid: {{ addressessFormArray.status }}</p> -->
         <!-- <pre><p>{{ roles | json }}</p></pre> -->
       </div>
     </div>

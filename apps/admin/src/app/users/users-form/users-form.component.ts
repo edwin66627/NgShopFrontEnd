@@ -15,13 +15,14 @@ import { timer } from 'rxjs';
   templateUrl: './users-form.component.html',
 })
 export class UsersFormComponent implements OnInit {
+  addresses: Address[] = [];
   countries = [];
   currentUserId: number;
   editmode = false;
   form: FormGroup;
   isSubmitted = false;
+  loading = false;
   roles: Role[] = [];
-  addresses: Address[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,10 +43,10 @@ export class UsersFormComponent implements OnInit {
 
   private _initUserForm() {
     this.form = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      username: ['', Validators.required],
-      password: ['', Validators.required],
+      firstName: ['', [Validators.required,Validators.minLength(3)]],
+      lastName: ['', [Validators.required,Validators.minLength(3)]],
+      username: ['', [Validators.required,Validators.minLength(6)]],
+      password: ['', [Validators.required,Validators.pattern(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&^_-]).{8,}/)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
       roles: ['', Validators.required],
@@ -82,6 +83,7 @@ export class UsersFormComponent implements OnInit {
   onSubmit(){
     this.isSubmitted = true;
     if (this.form.invalid) return;
+    this.loading = true;
 
     const user = new User();
     user.firstName = this.userForm.firstName.value;
@@ -99,6 +101,7 @@ export class UsersFormComponent implements OnInit {
     } else {
       this._addUser(user);
     }
+    this.loading = false;
   }
 
   private _addUser(user: User){
