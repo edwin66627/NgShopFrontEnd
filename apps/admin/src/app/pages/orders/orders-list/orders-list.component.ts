@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { OrderService } from '@mycompany/orders';
 import { ORDER_STATUS } from '../order.constants';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-orders-list',
@@ -12,7 +13,8 @@ export class OrdersListComponent implements OnInit {
   orderStatus = ORDER_STATUS;
 
   constructor(
-    private ordersService: OrderService
+    private ordersService: OrderService,
+    private router: Router
   ){}
 
   ngOnInit(): void {
@@ -25,8 +27,8 @@ export class OrdersListComponent implements OnInit {
     });
   }
 
-  showOrder(){
-    console.log("Show Order!!!");
+  showOrder(orderId){
+    this.router.navigateByUrl(`orders/${orderId}`);
   }
   deleteOrder(){
     console.log("Delete Order!!!");

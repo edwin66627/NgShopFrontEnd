@@ -11,10 +11,11 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './categories-form.component.html',
 })
 export class CategoriesFormComponent implements OnInit {
+  currentCategoryId: string;
+  editmode = false;
   form: FormGroup;
   isSubmitted = false;
-  editmode = false;
-  currentCategoryId: string;
+  loading = false;
 
   constructor(
     private categoriesService: CategoriesService,
@@ -36,9 +37,9 @@ export class CategoriesFormComponent implements OnInit {
   
   onSubmit() {
     this.isSubmitted = true;
-    if (this.form.invalid) {
-      return;
-    }
+    if (this.form.invalid) return;
+    this.loading = true;
+
     const category: Category = {
       id: this.currentCategoryId,
       name: this.categoryForm.name.value,
@@ -63,6 +64,7 @@ export class CategoriesFormComponent implements OnInit {
         })
         timer(2000)
           .subscribe(() => {
+            this.loading = false;
             this.location.back();
         });
       },
@@ -72,6 +74,7 @@ export class CategoriesFormComponent implements OnInit {
           summary: 'Error',
           detail: 'Category is not created!'
         });
+        this.loading = false;
       }  
     });
   }
@@ -86,6 +89,7 @@ export class CategoriesFormComponent implements OnInit {
         });
         timer(2000)
           .subscribe(() => {
+            this.loading = false;
             this.location.back();
           });
       },
@@ -95,6 +99,7 @@ export class CategoriesFormComponent implements OnInit {
           summary: 'Error',
           detail: 'Category is not updated!'
         });
+        this.loading = false;
       } 
     });
   }

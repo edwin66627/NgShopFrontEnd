@@ -19,7 +19,7 @@
           <ng-template pTemplate="body" let-order>
             <tr>
               <td>{{ order.user.firstName+ " " +order.user.lastName }}</td>
-              <td>{{ order.totalPrice }}</td>
+              <td>{{ order.totalPrice | currency }}</td>
               <td>{{ order.orderDate | date : 'short' }}</td>
               <td>
                 <p-tag
@@ -30,7 +30,7 @@
               <td>
                 <p-button
                   (click)="deleteOrder(order.id)"
-                  styleClass="p-button-danger p-mr-2"
+                  styleClass="p-button-danger mr-2"
                   icon="pi pi-trash"
                 ></p-button>
                 <p-button

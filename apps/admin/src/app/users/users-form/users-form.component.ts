@@ -97,7 +97,6 @@ export class UsersFormComponent implements OnInit {
     } else {
       this._addUser(user);
     }
-    this.loading = false;
   }
 
   private _addUser(user: User){
@@ -110,6 +109,7 @@ export class UsersFormComponent implements OnInit {
         });
         timer(2000)
           .subscribe(() => {
+            this.loading = false;
             this.location.back();
         });
       },
@@ -119,6 +119,7 @@ export class UsersFormComponent implements OnInit {
           summary: 'Error',
           detail: 'User was not created!'
         });
+        this.loading = false;
       }
     });
   }
@@ -133,6 +134,7 @@ export class UsersFormComponent implements OnInit {
         });
         timer(2000)
           .subscribe(() => {
+            this.loading = false;
             this.location.back();
         });
       },
@@ -142,6 +144,7 @@ export class UsersFormComponent implements OnInit {
           summary: 'Error',
           detail: 'User was not updated!'
         });
+        this.loading = false;
       }
     });
   }

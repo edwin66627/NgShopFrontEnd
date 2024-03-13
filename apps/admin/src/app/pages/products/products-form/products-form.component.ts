@@ -22,8 +22,9 @@ export class ProductsFormComponent implements OnInit {
   editmode = false;
   imagesToDelete: string[] = [];
   imagesToSave: File[] = [];
-  isSubmitted = false;
   imagesUploaded: Upload[] = [];
+  isSubmitted = false;
+  loading = false;
 
   constructor(
     private categoriesService: CategoriesService,
@@ -93,6 +94,7 @@ export class ProductsFormComponent implements OnInit {
   onSubmit(){
     this.isSubmitted = true;
     if (this.form.invalid) return;
+    this.loading = true;
 
     const product = this.returnProductToSave();
     const jsonForm = JSON.stringify(product);
@@ -119,6 +121,7 @@ export class ProductsFormComponent implements OnInit {
         });
         timer(2000)
           .subscribe(() => {
+            this.loading = false;
             this.location.back();
         });
       },
@@ -128,6 +131,7 @@ export class ProductsFormComponent implements OnInit {
           summary: 'Error',
           detail: 'Product is not created!'
         });
+        this.loading = false;
       }
     })  
   }
@@ -142,6 +146,7 @@ export class ProductsFormComponent implements OnInit {
         });
         timer(2000)
           .subscribe(() => {
+            this.loading = false;
             this.location.back();
           });
       },
@@ -151,6 +156,7 @@ export class ProductsFormComponent implements OnInit {
           summary: 'Error',
           detail: 'Product is not updated!'
         });
+        this.loading = false;
       }
     });
   }

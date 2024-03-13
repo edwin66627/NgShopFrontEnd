@@ -13,12 +13,14 @@
               styleClass="p-button-primary mr-2"
               [label]="editmode ? 'Update' : 'Create'"
               icon="pi pi-plus"
+              [loading]="loading"
               (click)="onSubmit()"
             ></p-button>
             <p-button
               styleClass="p-button-secondary"
               label="Cancel"
               icon="pi pi-arrow-circle-left"
+              [loading]="loading"
               (click)="onCancel()"
             ></p-button>
           </div>
