@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Order, OrderService } from '@mycompany/orders';
 import { ORDER_STATUS } from '../order.constants';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'admin-orders-detail',
@@ -13,6 +14,7 @@ export class OrdersDetailComponent implements OnInit {
   selectedStatus: any;
 
   constructor(
+    private messageService: MessageService,
     private orderService: OrderService,
     private route: ActivatedRoute
   ) {}
@@ -37,6 +39,25 @@ export class OrdersDetailComponent implements OnInit {
         this.orderService.getOrder(params.id).subscribe((order) => {
           this.order = order;
           this.selectedStatus = order.status;
+        });
+      }
+    });
+  }
+
+  onStatusChange(event) {
+    this.orderService.updateOrderStatus({ status: event.value }, this.order.id).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Order is updated!'
+        });
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Order is not updated!'
         });
       }
     });

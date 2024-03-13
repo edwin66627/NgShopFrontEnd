@@ -20,4 +20,8 @@ export class OrderService {
     return this.http.get<Order>(`${this.apiURLOrders}/${orderId}`);
   }
 
+  updateOrderStatus(orderStaus: { status: string }, orderId: number): Observable<Order> {
+    return this.http.put<Order>(`${this.apiURLOrders}/${orderId}`, orderStaus);
+  }
+
 }

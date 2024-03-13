@@ -33,6 +33,7 @@ import { EditorModule } from 'primeng/editor';
 import { InputMaskModule } from 'primeng/inputmask';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { TagModule } from 'primeng/tag';
+import { FieldsetModule } from 'primeng/fieldset';
 
 import { CategoriesService } from '@mycompany/products';
 import { UsersListComponent } from './users/users-list/users-list.component';
@@ -47,6 +48,7 @@ const UX_MODULE = [
   ConfirmDialogModule,
   DropdownModule,
   EditorModule,
+  FieldsetModule,
   InputMaskModule,
   InputNumberModule,
   InputTextareaModule,
