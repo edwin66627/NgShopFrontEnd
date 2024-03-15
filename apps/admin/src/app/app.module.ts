@@ -1,3 +1,4 @@
+import { UsersModule } from './../../../../libs/users/src/lib/users.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -66,6 +67,7 @@ const UX_MODULE = [
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
+    UsersModule,
     ...UX_MODULE
   ],
   providers: [CategoriesService, ConfirmationService, MessageService],
