@@ -12,11 +12,11 @@
               <div class="col-12">
                 <div class="p-inputgroup">
                   <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
-                  <input type="text" formControlName="email" pInputText placeholder="Email" />
+                  <input type="text" formControlName="username" pInputText placeholder="Username" />
                 </div>
-                <small *ngIf="loginForm.email.invalid && isSubmitted" class="p-error"
-                  ><span *ngIf="loginForm.email.errors.required">email is required</span>
-                  <span *ngIf="loginForm.email.errors.email">email is invalid</span></small
+                <small *ngIf="loginForm.username.invalid && isSubmitted" class="p-error"
+                  ><span *ngIf="loginForm.username.errors.required">Username is required</span>
+                  <span *ngIf="loginForm.username.errors.username">Username is invalid</span></small
                 >
               </div>
               <div class="col-12">
