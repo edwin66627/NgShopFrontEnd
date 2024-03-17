@@ -1,6 +1,7 @@
 export * from './lib/users';
 export * from './lib/services/users.service';
 export * from './lib/services/roles.service';
+export * from './lib/services/auth-guard.service';
 export * from './lib/models/user';
 export * from './lib/models/page';
 export * from './lib/models/role';
