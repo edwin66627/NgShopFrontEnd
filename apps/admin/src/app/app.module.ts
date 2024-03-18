@@ -2,7 +2,7 @@ import { UsersModule } from './../../../../libs/users/src/lib/users.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -41,6 +41,7 @@ import { UsersListComponent } from './users/users-list/users-list.component';
 import { UsersFormComponent } from './users/users-form/users-form.component';
 import { OrdersDetailComponent } from './pages/orders/orders-detail/orders-detail.component';
 import { OrdersListComponent } from './pages/orders/orders-list/orders-list.component';
+import { JwtInterceptor } from '@mycompany/users';
 
 const UX_MODULE = [
   ButtonModule,
@@ -70,7 +71,8 @@ const UX_MODULE = [
     UsersModule,
     ...UX_MODULE
   ],
-  providers: [CategoriesService, ConfirmationService, MessageService],
+  providers: [CategoriesService, ConfirmationService, MessageService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
   bootstrap: [AppComponent],
   exports: [
     DashboardComponent,
