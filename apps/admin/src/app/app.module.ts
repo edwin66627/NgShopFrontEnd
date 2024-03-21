@@ -1,7 +1,8 @@
+import { UsersModule } from './../../../../libs/users/src/lib/users.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -32,10 +33,15 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { EditorModule } from 'primeng/editor';
 import { InputMaskModule } from 'primeng/inputmask';
 import {MultiSelectModule} from 'primeng/multiselect';
+import { TagModule } from 'primeng/tag';
+import { FieldsetModule } from 'primeng/fieldset';
 
 import { CategoriesService } from '@mycompany/products';
-import { UsersListComponent } from './users/users-list/users-list.component';
-import { UsersFormComponent } from './users/users-form/users-form.component';
+import { UsersListComponent } from './pages/users/users-list/users-list.component';
+import { UsersFormComponent } from './pages/users/users-form/users-form.component';
+import { OrdersDetailComponent } from './pages/orders/orders-detail/orders-detail.component';
+import { OrdersListComponent } from './pages/orders/orders-list/orders-list.component';
+import { JwtInterceptor } from '@mycompany/users';
 
 const UX_MODULE = [
   ButtonModule,
@@ -44,6 +50,7 @@ const UX_MODULE = [
   ConfirmDialogModule,
   DropdownModule,
   EditorModule,
+  FieldsetModule,
   InputMaskModule,
   InputNumberModule,
   InputTextareaModule,
@@ -51,18 +58,21 @@ const UX_MODULE = [
   InputSwitchModule,
   MultiSelectModule,
   TableModule,
+  TagModule,
   ToastModule,
   ToolbarModule,
 ]
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent, DashboardComponent, ShellComponent, SidebarComponent, CategoriesListComponent, CategoriesFormComponent, ProductsListComponent, ProductsFormComponent, UsersListComponent, UsersFormComponent],
+  declarations: [AppComponent, NxWelcomeComponent, DashboardComponent, ShellComponent, SidebarComponent, CategoriesListComponent, CategoriesFormComponent, ProductsListComponent, ProductsFormComponent, UsersListComponent, UsersFormComponent, OrdersDetailComponent, OrdersListComponent],
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
+    UsersModule,
     ...UX_MODULE
   ],
-  providers: [CategoriesService, ConfirmationService, MessageService],
+  providers: [CategoriesService, ConfirmationService, MessageService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
   bootstrap: [AppComponent],
   exports: [
     DashboardComponent,
@@ -74,6 +84,8 @@ const UX_MODULE = [
     ProductsFormComponent,
     UsersListComponent,
     UsersFormComponent,
+    OrdersDetailComponent,
+    OrdersListComponent
   ],
 })
 export class AppModule {}

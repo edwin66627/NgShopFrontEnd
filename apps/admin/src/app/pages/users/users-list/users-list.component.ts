@@ -1,7 +1,6 @@
-import { UsersService } from './../../../../../../libs/users/src/lib/services/users.service';
-import { GetUsersRequest } from './../../../../../../libs/users/src/lib/models/get-users-request';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GetUsersRequest, UsersService } from '@mycompany/users';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
