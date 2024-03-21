@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { OrderService } from '@mycompany/orders';
 import { ORDER_STATUS } from '../order.constants';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'admin-orders-list',
   templateUrl: './orders-list.component.html',
 })
-export class OrdersListComponent implements OnInit {
+export class OrdersListComponent implements OnInit, OnDestroy {
+  endsubs$: Subject<void> = new Subject();
   orders = [];
   orderStatus = ORDER_STATUS;
 
@@ -21,8 +23,13 @@ export class OrdersListComponent implements OnInit {
     this._getOrders();
   }
 
+  ngOnDestroy() {
+    this.endsubs$.next();
+    this.endsubs$.complete();
+  }
+
   _getOrders() {
-    this.ordersService.getOrders().subscribe((orders) => {
+    this.ordersService.getOrders().pipe(takeUntil(this.endsubs$)).subscribe((orders) => {
       this.orders = orders;
     });
   }

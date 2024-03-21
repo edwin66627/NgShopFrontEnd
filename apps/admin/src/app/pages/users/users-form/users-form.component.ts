@@ -1,20 +1,21 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { User, UsersService, Role, RolesService, Address } from '@mycompany/users';
 import { MessageService } from 'primeng/api';
-import { timer } from 'rxjs';
+import { Subject, takeUntil, timer } from 'rxjs';
 
 @Component({
   selector: 'admin-users-form',
   templateUrl: './users-form.component.html',
 })
-export class UsersFormComponent implements OnInit {
+export class UsersFormComponent implements OnInit, OnDestroy {
   addresses: Address[] = [];
   countries = [];
   currentUserId: number;
   editmode = false;
+  endsubs$: Subject<void> = new Subject();
   form: FormGroup;
   isSubmitted = false;
   loading = false;
@@ -37,6 +38,11 @@ export class UsersFormComponent implements OnInit {
     if(!this.editmode)this.addAddressFormGroup();
   }
 
+  ngOnDestroy() {
+    this.endsubs$.next();
+    this.endsubs$.complete();
+  }
+
   private _initUserForm() {
     this.form = this.formBuilder.group({
       firstName: ['', [Validators.required,Validators.minLength(3)]],
@@ -51,7 +57,7 @@ export class UsersFormComponent implements OnInit {
   }
 
   private _getRoles(){
-    this.rolesService.getRoles().subscribe(roles => this.roles = roles);
+    this.rolesService.getRoles().pipe(takeUntil(this.endsubs$)).subscribe(roles => this.roles = roles);
   }
   
   private _getCountries() {
@@ -100,7 +106,7 @@ export class UsersFormComponent implements OnInit {
   }
 
   private _addUser(user: User){
-    this.usersService.createUser(user).subscribe({
+    this.usersService.createUser(user).pipe(takeUntil(this.endsubs$)).subscribe({
       next: (user: User) => {
         this.messageService.add({
           severity: 'success',
@@ -125,7 +131,7 @@ export class UsersFormComponent implements OnInit {
   }
 
   private _updateUser(user: User){
-    this.usersService.updateUser(user).subscribe({
+    this.usersService.updateUser(user).pipe(takeUntil(this.endsubs$)).subscribe({
       next: (user: User) => {
         this.messageService.add({
           severity: 'success',

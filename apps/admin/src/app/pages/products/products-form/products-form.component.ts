@@ -1,10 +1,10 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CategoriesService, Category, Product, ProductsService, Upload } from '@mycompany/products';
 import { MessageService } from 'primeng/api';
-import { timer } from 'rxjs';
+import { Subject, takeUntil, timer } from 'rxjs';
 
 import { environment } from 'environments/environment';
 
@@ -14,12 +14,13 @@ import { environment } from 'environments/environment';
   styles: [
   ]
 })
-export class ProductsFormComponent implements OnInit {
+export class ProductsFormComponent implements OnInit, OnDestroy {
   apiURL:string;
   catagories = [];
   currentProductId: number;
   form: FormGroup
   editmode = false;
+  endsubs$: Subject<void> = new Subject();
   imagesToDelete: string[] = [];
   imagesToSave: File[] = [];
   imagesUploaded: Upload[] = [];
@@ -42,6 +43,11 @@ export class ProductsFormComponent implements OnInit {
     this.apiURL = environment.apiUrl;
   }
 
+  ngOnDestroy() {
+    this.endsubs$.next();
+    this.endsubs$.complete();
+  }
+
   private _initForm() {
     this.form = this.formBuilder.group({
       name: ['', Validators.required],
@@ -57,7 +63,7 @@ export class ProductsFormComponent implements OnInit {
   }
 
   private _getCategories() {
-    this.categoriesService.getCategories().subscribe((categories) => {
+    this.categoriesService.getCategories().pipe(takeUntil(this.endsubs$)).subscribe((categories) => {
       this.catagories = categories;
     });
   }
@@ -112,7 +118,7 @@ export class ProductsFormComponent implements OnInit {
   }
 
   private _addProduct(productData: FormData){
-    this.productsService.createProduct(productData).subscribe({
+    this.productsService.createProduct(productData).pipe(takeUntil(this.endsubs$)).subscribe({
       next: (product: Product) => {
         this.messageService.add({
           severity: 'success',
@@ -137,7 +143,7 @@ export class ProductsFormComponent implements OnInit {
   }
 
   private _updateProduct(productFormData: FormData) {
-    this.productsService.updateProduct(productFormData, this.currentProductId).subscribe({
+    this.productsService.updateProduct(productFormData, this.currentProductId).pipe(takeUntil(this.endsubs$)).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',

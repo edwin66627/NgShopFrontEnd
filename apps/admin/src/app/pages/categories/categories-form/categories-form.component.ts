@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Category, CategoriesService } from '@mycompany/products';
 import { MessageService } from 'primeng/api';
-import { timer } from 'rxjs';
+import { Subject, takeUntil, timer } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'admin-categories-form',
   templateUrl: './categories-form.component.html',
 })
-export class CategoriesFormComponent implements OnInit {
+export class CategoriesFormComponent implements OnInit, OnDestroy {
   currentCategoryId: string;
   editmode = false;
+  endsubs$: Subject<void> = new Subject();
   form: FormGroup;
   isSubmitted = false;
   loading = false;
@@ -33,6 +34,11 @@ export class CategoriesFormComponent implements OnInit {
     });
 
     this._checkEditMode();
+  }
+
+  ngOnDestroy() {
+    this.endsubs$.next();
+    this.endsubs$.complete();
   }
   
   onSubmit() {
@@ -55,7 +61,7 @@ export class CategoriesFormComponent implements OnInit {
   }
 
   private _addCategory(category: Category){
-    this.categoriesService.createCategory(category).subscribe({
+    this.categoriesService.createCategory(category).pipe(takeUntil(this.endsubs$)).subscribe({
       next: (category: Category) => {
         this.messageService.add({
           severity: 'success',
@@ -80,7 +86,7 @@ export class CategoriesFormComponent implements OnInit {
   }
 
   private _updateCategory(category: Category) {
-    this.categoriesService.updateCategory(category).subscribe({
+    this.categoriesService.updateCategory(category).pipe(takeUntil(this.endsubs$)).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',

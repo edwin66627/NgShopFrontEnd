@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GetUsersRequest, UsersService } from '@mycompany/users';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'admin-users-list',
   templateUrl: './users-list.component.html',
 })
-export class UsersListComponent implements OnInit {
-  sortColumn = "firstName";
+export class UsersListComponent implements OnInit, OnDestroy {
+  endsubs$: Subject<void> = new Subject();
   loading: boolean;
   pageSize = 2;
   pageNumber = 0;
+  sortColumn = "firstName";
   sortDirection = "ASC";
   totalElements: number;
   usersRequest: GetUsersRequest;
@@ -28,6 +30,11 @@ export class UsersListComponent implements OnInit {
     this._getUsers();
   }
 
+  ngOnDestroy() {
+    this.endsubs$.next();
+    this.endsubs$.complete();
+  }
+
   private _getUsers(){
     this.loading = true;
     this.usersRequest = new GetUsersRequest();
@@ -35,7 +42,7 @@ export class UsersListComponent implements OnInit {
     this.usersRequest.pageNumber = this.pageNumber;
     this.usersRequest.sortColumn = this.sortColumn;
     this.usersRequest.sortDirection = this.sortDirection;
-    this.usersService.getUsers(this.usersRequest).subscribe(page => {
+    this.usersService.getUsers(this.usersRequest).pipe(takeUntil(this.endsubs$)).subscribe(page => {
       this.users = page.content;
       this.totalElements = page.totalElements;
     });
@@ -65,7 +72,7 @@ export class UsersListComponent implements OnInit {
       header: 'Delete User',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.usersService.deleteUser(userId).subscribe({
+        this.usersService.deleteUser(userId).pipe(takeUntil(this.endsubs$)).subscribe({
           next: () => {
             this._getUsers();
             this.messageService.add({
