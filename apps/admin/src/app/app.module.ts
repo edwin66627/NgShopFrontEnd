@@ -37,8 +37,8 @@ import { TagModule } from 'primeng/tag';
 import { FieldsetModule } from 'primeng/fieldset';
 
 import { CategoriesService } from '@mycompany/products';
-import { UsersListComponent } from './users/users-list/users-list.component';
-import { UsersFormComponent } from './users/users-form/users-form.component';
+import { UsersListComponent } from './pages/users/users-list/users-list.component';
+import { UsersFormComponent } from './pages/users/users-form/users-form.component';
 import { OrdersDetailComponent } from './pages/orders/orders-detail/orders-detail.component';
 import { OrdersListComponent } from './pages/orders/orders-list/orders-list.component';
 import { JwtInterceptor } from '@mycompany/users';
