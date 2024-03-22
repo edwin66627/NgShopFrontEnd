@@ -19,6 +19,16 @@
 // Shared
 @import './apps/ecommerce-ng-shop/shared/footer.scss';
 @import './apps/ecommerce-ng-shop/shared/header.scss';
+@import './apps/ecommerce-ng-shop/shared/nav.scss';
 
 // libs
-@import './libs/ui/ui.scss'
+@import './libs/ui/ui.scss';
+@import './libs/products/products.scss';
+
+// app.component.html
+.container {
+    width: 1200px;
+    padding: 15px;
+    margin: 0 auto;
+    background-color: var(--surface-100);
+  }
