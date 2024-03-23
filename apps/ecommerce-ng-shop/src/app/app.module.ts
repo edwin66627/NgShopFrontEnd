@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { NavComponent } from './shared/nav/nav.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { NavComponent } from './shared/nav/nav.component';
     FooterComponent,
     NavComponent,
   ],
-  imports: [BrowserModule, BrowserAnimationsModule, AppRoutingModule, UiModule, FormsModule, ProductsModule],
+  imports: [BrowserModule, BrowserAnimationsModule, AppRoutingModule, HttpClientModule, UiModule, 
+    FormsModule, ProductsModule],
   providers: [],
   bootstrap: [AppComponent],
   exports: [
