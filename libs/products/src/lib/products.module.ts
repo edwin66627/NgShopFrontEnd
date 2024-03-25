@@ -6,22 +6,28 @@ import { CategoriesBannerComponent } from './components/categories-banner/catego
 import { ProductItemComponent } from './components/product-item/product-item.component';
 import { FeaturedProductsComponent } from './components/featured-products/featured-products.component';
 import { RouterModule } from '@angular/router';
+import { ProductsListComponent } from './pages/products-list/products-list.component';
+import { ProductsRoutingModule } from './products-routing.module';
+
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   declarations: [
     ProductsSearchComponent,
     CategoriesBannerComponent,
     ProductItemComponent,
-    FeaturedProductsComponent
+    FeaturedProductsComponent,
+    ProductsListComponent
   ],
   imports: [
-    CommonModule,RouterModule, ButtonModule, 
+    CommonModule,RouterModule, ButtonModule, CheckboxModule, ProductsRoutingModule, 
   ],
   exports: [
     ProductsSearchComponent,
     CategoriesBannerComponent,
     ProductItemComponent,
-    FeaturedProductsComponent
+    FeaturedProductsComponent,
+    ProductsListComponent
   ]
 })
 export class ProductsModule { }

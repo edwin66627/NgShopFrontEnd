@@ -8,7 +8,6 @@ import { ProductsModule } from "@mycompany/products";
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
-import { ProductListComponent } from './pages/product-list/product-list.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
@@ -19,7 +18,6 @@ import { HttpClientModule } from '@angular/common/http';
   declarations: [
     AppComponent,
     HomeComponent,
-    ProductListComponent,
     HeaderComponent,
     FooterComponent,
     NavComponent,
