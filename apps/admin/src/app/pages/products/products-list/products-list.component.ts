@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductsService, GetProductsRequest } from '@mycompany/products';
 import { environment } from 'environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'admin-products-list',
@@ -10,14 +11,15 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   styles: [
   ]
 })
-export class ProductsListComponent implements OnInit {
+export class ProductsListComponent implements OnInit, OnDestroy {
   apiURLImages = environment.apiUrl + 'image/';
-  sortColumn = "name";
+  endsubs$: Subject<void> = new Subject();
   loading: boolean;
   pageSize = 3;
   pageNumber = 0;
   productsRequest: GetProductsRequest;
   products = [];
+  sortColumn = "name";
   sortDirection = "ASC";
   totalElements: number;
 
@@ -31,6 +33,11 @@ export class ProductsListComponent implements OnInit {
   ngOnInit(): void {
     this._getProducts();
   }
+
+  ngOnDestroy() {
+    this.endsubs$.next();
+    this.endsubs$.complete();
+  }
   
   private _getProducts() {
     this.loading = true;
@@ -41,7 +48,7 @@ export class ProductsListComponent implements OnInit {
     this.productsRequest.sortDirection = this.sortDirection;
     this.productsRequest.isFeatured = false;
     this.productsRequest.categories = [];
-    this.productsService.getProducts(this.productsRequest).subscribe((page) => {
+    this.productsService.getProducts(this.productsRequest).pipe(takeUntil(this.endsubs$)).subscribe((page) => {
       page.content.forEach(product => {
         const firstImage = product.image.split(",")[0];
         product.image = this.apiURLImages + firstImage;
@@ -62,7 +69,7 @@ export class ProductsListComponent implements OnInit {
       header: 'Delete Product',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.productsService.deleteProduct(productId).subscribe({
+        this.productsService.deleteProduct(productId).pipe(takeUntil(this.endsubs$)).subscribe({
           next: () => {
             this._getProducts();
             this.messageService.add({
