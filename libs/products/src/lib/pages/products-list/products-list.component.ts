@@ -6,6 +6,7 @@ import { ProductsService } from '../../services/products.service';
 import { environment } from 'environments/environment';
 import { Category } from '../../models/category';
 import { CategoriesService } from '../../services/categories.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'products-list',
@@ -17,6 +18,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   apiURLImages = environment.apiUrl + 'image/';
   categories: Category[] = [];
   endsubs$: Subject<void> = new Subject();
+  isCategoryPage: boolean;
   pageSize = 9;
   pageNumber = 0;
   productsRequest: GetProductsRequest = new GetProductsRequest();
@@ -26,11 +28,19 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   totalElements: number;
 
   constructor(
+    private route: ActivatedRoute,
     private categoriesService: CategoriesService,
     private productsService: ProductsService,
   ) {}
 
   ngOnInit(): void {
+    this.route.params.subscribe((params) =>{
+      if(params.categoryid){
+        this.productsRequest.categories.push(params.categoryid);
+        this.isCategoryPage = true;
+      }
+        
+    });
     this._getCategories();
     this._getProducts();
   }
