@@ -10,6 +10,10 @@ import { ProductsListComponent } from './pages/products-list/products-list.compo
 import { ProductsRoutingModule } from './products-routing.module';
 
 import { CheckboxModule } from 'primeng/checkbox';
+import { RatingModule } from 'primeng/rating';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { ProductsPageComponent } from './pages/products-page/products-page.component';
+import { UiModule } from '@mycompany/ui';
 
 @NgModule({
   declarations: [
@@ -17,17 +21,20 @@ import { CheckboxModule } from 'primeng/checkbox';
     CategoriesBannerComponent,
     ProductItemComponent,
     FeaturedProductsComponent,
-    ProductsListComponent
+    ProductsListComponent,
+    ProductsPageComponent
   ],
   imports: [
-    CommonModule,RouterModule, ButtonModule, CheckboxModule, ProductsRoutingModule, 
+    CommonModule,RouterModule, ButtonModule, CheckboxModule, ProductsRoutingModule, RatingModule,
+    InputNumberModule, UiModule 
   ],
   exports: [
     ProductsSearchComponent,
     CategoriesBannerComponent,
     ProductItemComponent,
     FeaturedProductsComponent,
-    ProductsListComponent
+    ProductsListComponent,
+    ProductsPageComponent
   ]
 })
 export class ProductsModule { }
