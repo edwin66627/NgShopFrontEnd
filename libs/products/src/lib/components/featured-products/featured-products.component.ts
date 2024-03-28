@@ -31,7 +31,7 @@ export class FeaturedProductsComponent implements OnInit {
     this.productsRequest.pageNumber = this.pageNumber;
     this.productsRequest.sortColumn = this.sortColumn;
     this.productsRequest.sortDirection = this.sortDirection;
-    this.productsRequest.isFeatured = false;
+    this.productsRequest.isFeatured = true;
     this.productsRequest.categories = [];
     this.productsService.getProducts(this.productsRequest).subscribe((page) => {
       page.content.forEach(product => {

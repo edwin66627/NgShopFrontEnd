@@ -4,5 +4,5 @@ export class GetProductsRequest{
     sortColumn?: string;
     sortDirection?: string;
     isFeatured?: boolean;
-    categories?: number[];
+    categories?: number[] = [];
 }
